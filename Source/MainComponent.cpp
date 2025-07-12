@@ -21,6 +21,7 @@ MainComponent::MainComponent()
     }
     
     addAndMakeVisible(playButton);
+    addAndMakeVisible(stopButton);
     addAndMakeVisible(volSlider);
     addAndMakeVisible(volLabel);
     volLabel.setText("Volume", juce::dontSendNotification);
@@ -46,6 +47,9 @@ MainComponent::MainComponent()
     // Initialize string displacements
     stringDisplacements.resize(6, 0.0f);
     stringsPluckedInDrag.resize(6, false);
+
+    playButton.addListener(this);
+    stopButton.addListener(this);
 }
 
 MainComponent::~MainComponent()
@@ -70,8 +74,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
-    
-    // Generate string sounds
+
+    // String sounds
     for (auto& string : strings)
     {
         for (int sample = 0; sample < bufferToFill.numSamples; ++sample)
@@ -127,61 +131,42 @@ void MainComponent::paint (juce::Graphics& g)
             g.drawLine(area.getX(), centerY, area.getRight(), centerY, 3.0f);
         }
     }
-    
-    // Draw instruction text at better position
-    g.setColour(juce::Colours::white);
-    g.setFont(16.0f);
-    g.drawText("Drag across the strings like a guitar and release!", 
-               0, 105, getWidth(), 30, juce::Justification::centred);
-}
+    }
 
 void MainComponent::resized()
 {
-    // Improved layout with better spacing
-    int topMargin = 20;
-    int controlHeight = 40;
-    int labelHeight = 20;
-    int buttonWidth = 100;
-    int sliderWidth = 200;
-    int dropdownWidth = 120;
+    int rowH = getHeight() / 10; // Divide window into 10 rows
     
-    // Play button on the left
-    playButton.setBounds(20, topMargin + labelHeight + 5, buttonWidth, controlHeight);
+    // Simple row-based layout
+    playButton.setBounds(10, 10, getWidth() / 4, rowH / 2);
+    stopButton.setBounds(10, rowH / 2 + 15, getWidth() / 4, rowH / 2);
     
-    // Volume section centered
-    int centerX = getWidth() / 2;
-    volLabel.setBounds(centerX - sliderWidth/2, topMargin, sliderWidth, labelHeight);
-    volSlider.setBounds(centerX - sliderWidth/2, topMargin + labelHeight + 5, sliderWidth, controlHeight);
+    volLabel.setBounds(getWidth() / 3, 0, getWidth() / 3, rowH);
+    volSlider.setBounds(getWidth() / 3, rowH, getWidth() / 3, rowH);
     
-    // Track section on the right
-    int rightX = getWidth() - dropdownWidth - 20;
-    trackLabel.setBounds(rightX, topMargin, dropdownWidth, labelHeight);
-    trackSelector.setBounds(rightX, topMargin + labelHeight + 5, dropdownWidth, controlHeight);
+    trackLabel.setBounds(getWidth() - getWidth() / 4 - 10, 10, getWidth() / 4, rowH / 2);
+    trackSelector.setBounds(getWidth() - getWidth() / 4 - 10, rowH / 2 + 15, getWidth() / 4, rowH / 2);
     
-    // More space between controls and strings
-    int stringStartY = topMargin + labelHeight + controlHeight + 90; // Extra space for instructions
-    int stringHeight = 25;
-    int stringSpacing = 55; // More space between strings
-    int stringWidth = getWidth() - 100; // Margins on both sides
+    // Strings take up the bottom area
+    int stringStartY = 3 * rowH;
+    int stringHeight = rowH;
+    int stringSpacing = rowH; 
+    int stringWidth = getWidth(); 
     
-    // Layout string areas with better spacing
     stringAreas.clear();
     for (int i = 0; i < 6; ++i)
     {
-        stringAreas.push_back(juce::Rectangle<int>(50, stringStartY + i * stringSpacing, stringWidth, stringHeight));
+        stringAreas.push_back(juce::Rectangle<int>(0, stringStartY + i * stringSpacing, stringWidth, stringHeight));
     }
     
-    // Ensure our tracking vectors match the number of strings
     stringsPluckedInDrag.resize(stringAreas.size(), false);
 }
 
 void MainComponent::mouseDown (const juce::MouseEvent& e)
 {
     isDragging = true;
-    // Reset all strings plucked tracking
     std::fill(stringsPluckedInDrag.begin(), stringsPluckedInDrag.end(), false);
     
-    // Check if we started on any string and pluck it immediately
     for (int i = 0; i < stringAreas.size(); ++i)
     {
         if (stringAreas[i].contains(e.getPosition()))
@@ -205,16 +190,14 @@ void MainComponent::mouseDrag (const juce::MouseEvent& e)
     {
         if (stringAreas[i].contains(e.getPosition()))
         {
-            if (!stringsPluckedInDrag[i]) // Only pluck if not already plucked in this drag
+            if (!stringsPluckedInDrag[i]) 
             {
                 strings[i]->pluck();
                 stringsPluckedInDrag[i] = true;
                 
-                // Add some visual feedback - briefly show displacement
                 stringDisplacements[i] = 20.0f;
                 repaint();
                 
-                // Start a timer to reset the visual displacement
                 juce::Timer::callAfterDelay(100, [this, i]() {
                     if (i < stringDisplacements.size())
                     {
@@ -230,7 +213,20 @@ void MainComponent::mouseDrag (const juce::MouseEvent& e)
 void MainComponent::mouseUp (const juce::MouseEvent& e)
 {
     isDragging = false;
-    // Reset all displacements
     std::fill(stringDisplacements.begin(), stringDisplacements.end(), 0.0f);
     repaint();
+}
+
+void MainComponent::buttonClicked(juce::Button* button)
+{
+    if (button == &playButton)
+    {
+        // play button click
+        std::cout << "Play button clicked" << std::endl;
+    }
+    else if (button == &stopButton)
+    {
+        // stop button click
+        std::cout << "Stop button clicked" << std::endl;
+    }
 }

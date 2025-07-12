@@ -2,8 +2,7 @@
 
 #include <JuceHeader.h>
 
-//==============================================================================
-// Simple plucked string synthesizer using Karplus-Strong algorithm
+// Plucked string synthesiser
 class StringSynthesiser
 {
 public:
@@ -25,7 +24,7 @@ public:
     float getNextSample()
     {
         auto nextPos = (pos + 1) % delayLine.size();
-        delayLine[nextPos] = (delayLine[pos] + delayLine[nextPos]) * 0.499f; // Low-pass filter
+        delayLine[nextPos] = (delayLine[pos] + delayLine[nextPos]) * 0.499f; // Filter
         auto output = delayLine[pos];
         pos = nextPos;
         return output;
@@ -36,8 +35,9 @@ private:
     size_t pos = 0;
 };
 
-//==============================================================================
-class MainComponent  : public juce::AudioAppComponent
+// Main
+class MainComponent  : public juce::AudioAppComponent,
+                       public juce::Button::Listener
 {
 public:
     MainComponent();
@@ -53,19 +53,23 @@ public:
     void mouseDrag (const juce::MouseEvent& e) override;
     void mouseUp (const juce::MouseEvent& e) override;
 
+    // Implement Button::Listener
+    void buttonClicked(juce::Button* button) override;
+
 private:
-    juce::TextButton playButton{"PLAY"};
     juce::Slider volSlider;
     juce::Label volLabel;
     juce::ComboBox trackSelector;
     juce::Label trackLabel;
-    
+    juce::TextButton playButton{"PLAY"};
+    juce::TextButton stopButton{"STOP"};
+
     // Plucked strings
     std::vector<std::unique_ptr<StringSynthesiser>> strings;
     std::vector<juce::Rectangle<int>> stringAreas;
     std::vector<float> stringDisplacements; // How much each string is pulled
-    std::vector<bool> stringsPluckedInDrag; // Which strings have been plucked in current drag
-    bool isDragging = false; // Whether we're currently dragging
+    std::vector<bool> stringsPluckedInDrag; // Which strings have been plucked 
+    bool isDragging = false; 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -119,19 +119,21 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // Clear the buffer first
     bufferToFill.clearActiveBufferRegion();
     
-    // Create temporary buffers for each player
-    juce::AudioSourceChannelInfo player1Info = bufferToFill;
-    juce::AudioSourceChannelInfo player2Info = bufferToFill;
+    // Get audio from player1 directly into the main buffer
+    player1.getNextAudioBlock(bufferToFill);
     
-    // Get audio from both players
-    player1.getNextAudioBlock(player1Info);
-    player2.getNextAudioBlock(player2Info);
+    // Create a temporary buffer for player2
+    juce::AudioBuffer<float> tempBuffer(bufferToFill.buffer->getNumChannels(), bufferToFill.numSamples);
+    juce::AudioSourceChannelInfo tempInfo(&tempBuffer, 0, bufferToFill.numSamples);
     
-    // Mix the two players together
+    // Get audio from player2 into temporary buffer
+    player2.getNextAudioBlock(tempInfo);
+    
+    // Mix player2's audio into the main buffer
     for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
     {
         bufferToFill.buffer->addFrom(channel, bufferToFill.startSample,
-                                   *player2Info.buffer, channel, player2Info.startSample,
+                                   tempBuffer, channel, 0,
                                    bufferToFill.numSamples);
     }
 }

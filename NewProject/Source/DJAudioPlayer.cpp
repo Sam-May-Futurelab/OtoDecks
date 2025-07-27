@@ -63,13 +63,26 @@ void DJAudioPlayer::loadURL(juce::URL audioURL)
 
 void DJAudioPlayer::setGain(double gain)
 {
-    this->gain = gain;
+    if (gain < 0.0 || gain > 1.0)
+    {
+        std::cout << "Gain should be between 0.0 and 1.0" << std::endl;
+    }
+    else
+    {
+        this->gain = gain;
+    }
 }
 
 void DJAudioPlayer::setSpeed(double ratio)
 {
-    if (ratio > 0 && ratio <= 4.0)
+    if (ratio <= 0.0 || ratio > 4.0)
+    {
+        std::cout << "Speed ratio should be between 0.0 and 4.0" << std::endl;
+    }
+    else
+    {
         resamplingSource.setResamplingRatio(ratio);
+    }
 }
 
 void DJAudioPlayer::setPosition(double posInSecs)

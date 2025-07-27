@@ -10,7 +10,7 @@
 
 #include "DJAudioPlayer.h"
 
-DJAudioPlayer::DJAudioPlayer()
+DJAudioPlayer::DJAudioPlayer() : resamplingSource(&transportSource, false, 2)
 {
     formatManager.registerBasicFormats();
 }
@@ -48,16 +48,23 @@ void DJAudioPlayer::releaseResources()
 
 void DJAudioPlayer::loadURL(juce::URL audioURL)
 {
-    transportSource.stop();
-    transportSource.setSource(nullptr);
-    readerSource.reset();
+    std::cout << "Loading URL: " << audioURL.toString(false).toStdString() << std::endl;
     
-    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(juce::URL::InputStreamOptions(juce::URL::ParameterHandling::inAddress)));
+    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
     if (reader != nullptr)
     {
+        std::cout << "Reader created successfully" << std::endl;
+        transportSource.setSource(nullptr);
+        readerSource.reset();
+        
         std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));
         transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
         readerSource.reset(newSource.release());
+        std::cout << "File loaded successfully" << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to create reader for file" << std::endl;
     }
 }
 

@@ -96,8 +96,13 @@ void MainComponent::resized()
     const int labelHeight = 20;
     const int margin = 10;
     
+    // Split the window in half vertically
+    const int halfWidth = getWidth() / 2;
+    const int leftSideWidth = halfWidth - margin;
+    
     int y = margin;
     
+    // Left side: All controls
     // Row 1: Buttons
     playButton.setBounds(margin, y, 100, buttonHeight);
     stopButton.setBounds(120, y, 100, buttonHeight);
@@ -108,21 +113,24 @@ void MainComponent::resized()
     // Row 2: Volume
     volLabel.setBounds(margin, y, 100, labelHeight);
     y += labelHeight;
-    volSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
+    volSlider.setBounds(margin, y, leftSideWidth, sliderHeight);
     
     y += sliderHeight + margin;
     
     // Row 3: Speed
     speedLabel.setBounds(margin, y, 100, labelHeight);
     y += labelHeight;
-    speedSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
+    speedSlider.setBounds(margin, y, leftSideWidth, sliderHeight);
     
     y += sliderHeight + margin;
     
     // Row 4: Position
     posLabel.setBounds(margin, y, 100, labelHeight);
     y += labelHeight;
-    posSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
+    posSlider.setBounds(margin, y, leftSideWidth, sliderHeight);
+    
+    // Right side: Empty for now (halfWidth to getWidth())
+    // Future deck 2 controls will go here
 }
 
 void MainComponent::buttonClicked(juce::Button* button)
@@ -137,17 +145,17 @@ void MainComponent::buttonClicked(juce::Button* button)
     }
     else if (button == &loadButton)
     {
-        auto fileChooser = std::make_unique<juce::FileChooser>("Select a Wave file to play...",
-                                                               juce::File{},
-                                                               "*.wav");
-        auto fileChooserFlags = juce::FileBrowserComponent::canSelectFiles;
+        fileChooser = std::make_unique<juce::FileChooser>("Select an audio file to play...",
+                                                          juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+                                                          "*.wav;*.mp3;*.m4a;*.aac;*.flac;*.ogg;*.aif;*.aiff");
         
-        fileChooser->launchAsync(fileChooserFlags,
+        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
                                 [this](const juce::FileChooser& fc)
                                 {
                                     auto file = fc.getResult();
-                                    if (file != juce::File{})
+                                    if (file.existsAsFile())
                                     {
+                                        std::cout << "Loading file: " << file.getFullPathName().toStdString() << std::endl;
                                         player1.loadURL(juce::URL{file});
                                     }
                                 });

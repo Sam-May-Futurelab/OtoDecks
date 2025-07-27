@@ -28,6 +28,7 @@ public:
 private:
     juce::Random rand;
 
+    // Deck 1 components
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
     juce::TextButton loadButton{"LOAD"};
@@ -40,9 +41,24 @@ private:
     juce::Label speedLabel;
     juce::Label posLabel;
 
+    // Deck 2 components
+    juce::TextButton playButton2{"PLAY"};
+    juce::TextButton stopButton2{"STOP"};
+    juce::TextButton loadButton2{"LOAD"};
+    
+    juce::Slider volSlider2;
+    juce::Slider speedSlider2;
+    juce::Slider posSlider2;
+    
+    juce::Label volLabel2;
+    juce::Label speedLabel2;
+    juce::Label posLabel2;
+
     DJAudioPlayer player1;
+    DJAudioPlayer player2;
     
     std::unique_ptr<juce::FileChooser> fileChooser;
+    std::unique_ptr<juce::FileChooser> fileChooser2;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

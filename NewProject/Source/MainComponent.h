@@ -26,16 +26,19 @@ public:
     void sliderValueChanged(juce::Slider* slider) override;
 
 private:
-    juce::Slider volSlider;
-    juce::Slider speedSlider;
-    juce::Label volLabel;
-    juce::ComboBox trackSelector;
-    juce::Label trackLabel;
+    juce::Random rand;
+
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
     juce::TextButton loadButton{"LOAD"};
-
-    juce::Random rand;
+    
+    juce::Slider volSlider;
+    juce::Slider speedSlider;
+    juce::Slider posSlider;
+    
+    juce::Label volLabel;
+    juce::Label speedLabel;
+    juce::Label posLabel;
 
     DJAudioPlayer player1;
 

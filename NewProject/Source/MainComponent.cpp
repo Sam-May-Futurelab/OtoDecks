@@ -20,46 +20,45 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
     
-    addAndMakeVisible(playButton);
-    addAndMakeVisible(stopButton);
-    addAndMakeVisible(loadButton);
-    addAndMakeVisible(volSlider);
-    addAndMakeVisible(volLabel);
-    addAndMakeVisible(speedSlider);
-
-    volLabel.setText("Volume", juce::dontSendNotification);
-    volLabel.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(trackSelector);
-
-    trackSelector.addItem("Track 1", 1);
-    trackSelector.addItem("Track 2", 2);
-    trackSelector.addItem("Track 3", 3);
-    trackSelector.setSelectedId(1);
-
-    addAndMakeVisible(trackLabel);
-    trackLabel.setText("Track", juce::dontSendNotification);
-    trackLabel.setJustificationType(juce::Justification::centred);
-    trackSelector.onChange = [this]() {
-        // Track selection changed - could add different functionality here
-    };
+    // Add buttons
+    addAndMakeVisible(&playButton);
+    addAndMakeVisible(&stopButton);
+    addAndMakeVisible(&loadButton);
     
-    // Set up volume slider
-    volSlider.setRange(0.0, 1.0);
-    volSlider.setValue(0.5);
-    volSlider.setSliderStyle(juce::Slider::LinearHorizontal);
-    volSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-    
-    // Set up speed slider (resampling ratio)
-    speedSlider.setRange(0.25, 4.0); // Quarter speed to 4x speed
-    speedSlider.setValue(1.0); // Normal speed
-    speedSlider.setSliderStyle(juce::Slider::LinearHorizontal);
-    speedSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-
+    // Set up button listeners
     playButton.addListener(this);
     stopButton.addListener(this);
     loadButton.addListener(this);
+    
+    // Add sliders
+    addAndMakeVisible(&volSlider);
+    addAndMakeVisible(&speedSlider);
+    addAndMakeVisible(&posSlider);
+    
+    // Set up slider listeners
     volSlider.addListener(this);
     speedSlider.addListener(this);
+    posSlider.addListener(this);
+    
+    // Set slider ranges
+    volSlider.setRange(0.0, 1.0);
+    volSlider.setValue(0.5);
+    speedSlider.setRange(0.5, 2.0);
+    speedSlider.setValue(1.0);
+    posSlider.setRange(0.0, 1.0);
+    posSlider.setValue(0.0);
+    
+    // Add labels
+    addAndMakeVisible(&volLabel);
+    addAndMakeVisible(&speedLabel);
+    addAndMakeVisible(&posLabel);
+    
+    volLabel.setText("Volume", juce::dontSendNotification);
+    volLabel.setJustificationType(juce::Justification::centredLeft);
+    speedLabel.setText("Speed", juce::dontSendNotification);
+    speedLabel.setJustificationType(juce::Justification::centredLeft);
+    posLabel.setText("Position", juce::dontSendNotification);
+    posLabel.setJustificationType(juce::Justification::centredLeft);
 }
 
 MainComponent::~MainComponent()
@@ -92,19 +91,38 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    int rowH = getHeight() / 8; // Divide window into 8 rows
+    const int buttonHeight = 40;
+    const int sliderHeight = 30;
+    const int labelHeight = 20;
+    const int margin = 10;
     
-    // Simple row-based layout
-    playButton.setBounds(10, 10, getWidth() / 4, rowH);
-    stopButton.setBounds(10, rowH + 15, getWidth() / 4, rowH);
-    loadButton.setBounds(10, rowH * 2 + 20, getWidth() / 4, rowH);
+    int y = margin;
     
-    volLabel.setBounds(getWidth() / 3, 0, getWidth() / 3, rowH);
-    volSlider.setBounds(getWidth() / 3, rowH, getWidth() / 3, rowH);
-    speedSlider.setBounds(getWidth() / 3, rowH * 2, getWidth() / 3, rowH);
+    // Row 1: Buttons
+    playButton.setBounds(margin, y, 100, buttonHeight);
+    stopButton.setBounds(120, y, 100, buttonHeight);
+    loadButton.setBounds(230, y, 100, buttonHeight);
     
-    trackLabel.setBounds(getWidth() - getWidth() / 4 - 10, 10, getWidth() / 4, rowH);
-    trackSelector.setBounds(getWidth() - getWidth() / 4 - 10, rowH + 15, getWidth() / 4, rowH);
+    y += buttonHeight + margin;
+    
+    // Row 2: Volume
+    volLabel.setBounds(margin, y, 100, labelHeight);
+    y += labelHeight;
+    volSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
+    
+    y += sliderHeight + margin;
+    
+    // Row 3: Speed
+    speedLabel.setBounds(margin, y, 100, labelHeight);
+    y += labelHeight;
+    speedSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
+    
+    y += sliderHeight + margin;
+    
+    // Row 4: Position
+    posLabel.setBounds(margin, y, 100, labelHeight);
+    y += labelHeight;
+    posSlider.setBounds(margin, y, getWidth() - 2 * margin, sliderHeight);
 }
 
 void MainComponent::buttonClicked(juce::Button* button)
@@ -119,22 +137,20 @@ void MainComponent::buttonClicked(juce::Button* button)
     }
     else if (button == &loadButton)
     {
-        // Use async file chooser as required in JUCE 8
-        auto chooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+        auto fileChooser = std::make_unique<juce::FileChooser>("Select a Wave file to play...",
+                                                               juce::File{},
+                                                               "*.wav");
+        auto fileChooserFlags = juce::FileBrowserComponent::canSelectFiles;
         
-        auto* chooser = new juce::FileChooser("Select an audio file...", 
-                                            juce::File::getSpecialLocation(juce::File::userMusicDirectory), 
-                                            "*.mp3;*.wav;*.m4a;*.aiff");
-        
-        chooser->launchAsync(chooserFlags, [this, chooser](const juce::FileChooser&)
-        {
-            auto file = chooser->getResult();
-            if (file.existsAsFile())
-            {
-                player1.loadURL(juce::URL{file});
-            }
-            delete chooser;
-        });
+        fileChooser->launchAsync(fileChooserFlags,
+                                [this](const juce::FileChooser& fc)
+                                {
+                                    auto file = fc.getResult();
+                                    if (file != juce::File{})
+                                    {
+                                        player1.loadURL(juce::URL{file});
+                                    }
+                                });
     }
 }
 
@@ -142,10 +158,14 @@ void MainComponent::sliderValueChanged(juce::Slider* slider)
 {
     if (slider == &volSlider)
     {
-        player1.setGain(slider->getValue());
+        player1.setGain(volSlider.getValue());
     }
     else if (slider == &speedSlider)
     {
-        player1.setSpeed(slider->getValue());
+        player1.setSpeed(speedSlider.getValue());
+    }
+    else if (slider == &posSlider)
+    {
+        player1.setPositionRelative(posSlider.getValue());
     }
 }

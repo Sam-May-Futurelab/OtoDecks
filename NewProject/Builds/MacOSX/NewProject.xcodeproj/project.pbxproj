@@ -43,6 +43,7 @@
 		EBCB95F002364020B994CC85 /* IOKit.framework */ = {isa = PBXBuildFile; fileRef = 7D8863290D82735113B55C95; };
 		EEECCB489F83FF1AA9F03C92 /* Security.framework */ = {isa = PBXBuildFile; fileRef = 48E2C3C1A47853AA4E45745B; };
 		F6129088CF4DB9C76529626A /* CoreAudioKit.framework */ = {isa = PBXBuildFile; fileRef = 5A5214F76E1D791CD8232F98; };
+		FA1868E613619F947F44A200 /* WaveformDisplay.cpp */ = {isa = PBXBuildFile; fileRef = 54D9DB84EE786CB41D23D45E; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		0931107167796DFED64EF69A /* include_juce_events.mm */ /* include_juce_events.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_events.mm; path = ../../JuceLibraryCode/include_juce_events.mm; sourceTree = SOURCE_ROOT; };
 		0A70EAABEFBBAAF407755F42 /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		195B64D715C17017667BE521 /* DeckGUI.h */ /* DeckGUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeckGUI.h; path = ../../Source/DeckGUI.h; sourceTree = SOURCE_ROOT; };
+		28646460175187022F1073E5 /* WaveformDisplay.h */ /* WaveformDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WaveformDisplay.h; path = ../../Source/WaveformDisplay.h; sourceTree = SOURCE_ROOT; };
 		2AEB2558D365A4F12F5FEF92 /* include_juce_audio_formats.mm */ /* include_juce_audio_formats.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_formats.mm; path = ../../JuceLibraryCode/include_juce_audio_formats.mm; sourceTree = SOURCE_ROOT; };
 		2CB1104CD55F7FED3B2AFB5A /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
 		2D1C9CD869EC396E6D9A0F93 /* include_juce_gui_extra.mm */ /* include_juce_gui_extra.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_extra.mm; path = ../../JuceLibraryCode/include_juce_gui_extra.mm; sourceTree = SOURCE_ROOT; };
@@ -65,6 +67,7 @@
 		4F694F884D902EC09300051E /* juce_gui_extra */ /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = /Users/MacBook/Desktop/Projects/JUCE/modules/juce_gui_extra; sourceTree = "<absolute>"; };
 		5205FB8B79F4DF698440FFE7 /* include_juce_audio_devices.mm */ /* include_juce_audio_devices.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_devices.mm; path = ../../JuceLibraryCode/include_juce_audio_devices.mm; sourceTree = SOURCE_ROOT; };
 		54888997DB789BA80EBF395F /* juce_audio_processors */ /* juce_audio_processors */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_processors; path = /Users/MacBook/Desktop/Projects/JUCE/modules/juce_audio_processors; sourceTree = "<absolute>"; };
+		54D9DB84EE786CB41D23D45E /* WaveformDisplay.cpp */ /* WaveformDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WaveformDisplay.cpp; path = ../../Source/WaveformDisplay.cpp; sourceTree = SOURCE_ROOT; };
 		58882D8C516EA99D73A67BB6 /* include_juce_core.mm */ /* include_juce_core.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_core.mm; path = ../../JuceLibraryCode/include_juce_core.mm; sourceTree = SOURCE_ROOT; };
 		5A5214F76E1D791CD8232F98 /* CoreAudioKit.framework */ /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		5C2B557F1308ED92746D2839 /* CoreAudio.framework */ /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -208,12 +211,14 @@
 		B98156B7791DE1E1A9573D23 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				54D9DB84EE786CB41D23D45E,
+				28646460175187022F1073E5,
 				BD70B817E07EBA1F260C5841,
 				9C365AF8C704ECD8015A57C8,
-				A1EAF93DF525744131F89DC0,
-				8822FC86A69B5E272D04825A,
-				195B64D715C17017667BE521,
 				7BC0F903E935911EE20A2EDF,
+				A1EAF93DF525744131F89DC0,
+				195B64D715C17017667BE521,
+				8822FC86A69B5E272D04825A,
 				7C9A48517ABCECF30014920F,
 			);
 			name = Source;
@@ -326,9 +331,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA1868E613619F947F44A200,
 				9995C85801CDB5C2E68F1D15,
-				CFEA26947DDC868C2C94D80D,
 				9A9DA394DEC610657B5EFAC1,
+				CFEA26947DDC868C2C94D80D,
 				2C8062EA2F3770EC07399DEE,
 				D785964920B2826E031BEA7B,
 				729C22B934D50769C901E2AF,

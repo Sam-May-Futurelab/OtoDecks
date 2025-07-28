@@ -50,7 +50,7 @@ void DJAudioPlayer::loadURL(juce::URL audioURL)
 {
     std::cout << "Loading URL: " << audioURL.toString(false).toStdString() << std::endl;
     
-    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
+    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(juce::URL::InputStreamOptions(juce::URL::ParameterHandling::inAddress)));
     if (reader != nullptr)
     {
         std::cout << "Reader created successfully" << std::endl;

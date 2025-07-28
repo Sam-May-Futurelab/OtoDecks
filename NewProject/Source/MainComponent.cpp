@@ -41,6 +41,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
     player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
     mixerSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+
+    mixerSource.addInputSource(&player1, false);
+    mixerSource.addInputSource(&player2, false);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)

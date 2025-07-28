@@ -26,6 +26,8 @@ MainComponent::MainComponent()
     // Add the two DeckGUI components
     addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
+
+    addAndMakeVisible(playlistComponent);
 }
 
 MainComponent::~MainComponent()
@@ -64,8 +66,14 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    // Split the window in half vertically for the two decks
+    // Create a 3-section layout: decks on top, playlist at bottom
     auto area = getLocalBounds();
-    deckGUI1.setBounds(area.removeFromLeft(getWidth() / 2));
+    
+    // Reserve bottom area for playlist (bigger, e.g., 150 pixels)
+    auto playlistArea = area.removeFromBottom(150);
+    playlistComponent.setBounds(playlistArea);
+    
+    // Split remaining area in half vertically for the two decks
+    deckGUI1.setBounds(area.removeFromLeft(area.getWidth() / 2));
     deckGUI2.setBounds(area);
 }

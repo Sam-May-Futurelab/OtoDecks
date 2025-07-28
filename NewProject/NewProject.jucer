@@ -4,6 +4,10 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="itOoJi" name="NewProject">
     <GROUP id="{7B552A32-04ED-E57B-F140-F4C026CB3F78}" name="Source">
+      <FILE id="NNe8ru" name="PlaylistComponent.cpp" compile="1" resource="0"
+            file="Source/PlaylistComponent.cpp"/>
+      <FILE id="nitSvI" name="PlaylistComponent.h" compile="0" resource="0"
+            file="Source/PlaylistComponent.h"/>
       <FILE id="bl79B5" name="WaveformDisplay.cpp" compile="1" resource="0"
             file="Source/WaveformDisplay.cpp"/>
       <FILE id="DyuFDL" name="WaveformDisplay.h" compile="0" resource="0"

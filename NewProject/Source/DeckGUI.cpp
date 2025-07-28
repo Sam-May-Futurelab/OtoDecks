@@ -49,7 +49,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     speedSlider.addListener(this);
     posSlider.addListener(this);
 
-    startTimer(500);
+    startTimer(50); // Updates timer every 50ms
 }
 
 DeckGUI::~DeckGUI()
@@ -62,10 +62,6 @@ void DeckGUI::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (14.0f));
-    g.drawText ("DeckGUI", getLocalBounds(),
-                juce::Justification::centred, true);
 }
 
 void DeckGUI::resized()
@@ -86,8 +82,8 @@ void DeckGUI::resized()
     posLabel.setBounds(10, rowH * 3 + 80, getWidth() - 20, 20);
     posSlider.setBounds(10, rowH * 3 + 100, getWidth() - 20, rowH);
     
-    // Waveform - bottom half
-    waveformDisplay.setBounds(10, rowH * 5, getWidth() - 20, getHeight() - rowH * 5 - 10);
+    // Waveform - moved down to give more space above
+    waveformDisplay.setBounds(10, rowH * 6, getWidth() - 20, rowH * 2);
 }
 
 void DeckGUI::buttonClicked(juce::Button* button)

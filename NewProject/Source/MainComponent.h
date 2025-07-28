@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "DeckGUI.h"
+#include "PlaylistComponent.h"
 
 class MainComponent  : public juce::AudioAppComponent
 {
@@ -31,6 +32,8 @@ private:
     // GUI components - one for each deck
     DeckGUI deckGUI1{&player1, formatManager, thumbnailCache};
     DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
+
+    PlaylistComponent playlistComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

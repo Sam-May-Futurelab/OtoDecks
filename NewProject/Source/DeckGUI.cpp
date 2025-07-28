@@ -1,18 +1,8 @@
-/*
-  ==============================================================================
-
-    DeckGUI.cpp
-    Created: 27 Jul 2025 2:52:05pm
-    Author:  MacBook
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "DeckGUI.h"
 
 //==============================================================================
-DeckGUI::DeckGUI()
+DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
@@ -46,6 +36,14 @@ DeckGUI::DeckGUI()
     posSlider.setValue(0.0);
     posSlider.setSliderStyle(juce::Slider::LinearHorizontal);
     posSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    
+    // Add listeners
+    playButton.addListener(this);
+    stopButton.addListener(this);
+    loadButton.addListener(this);
+    volSlider.addListener(this);
+    speedSlider.addListener(this);
+    posSlider.addListener(this);
 }
 
 DeckGUI::~DeckGUI()
@@ -54,22 +52,13 @@ DeckGUI::~DeckGUI()
 
 void DeckGUI::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
+    g.drawRect (getLocalBounds(), 1);
     g.setColour (juce::Colours::white);
     g.setFont (juce::FontOptions (14.0f));
     g.drawText ("DeckGUI", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+                juce::Justification::centred, true);
 }
 
 void DeckGUI::resized()
@@ -85,4 +74,48 @@ void DeckGUI::resized()
     speedSlider.setBounds(getWidth() / 3, rowH * 2, getWidth() / 3, rowH);
     posLabel.setBounds(getWidth() / 3, rowH * 3, getWidth() / 3, rowH);
     posSlider.setBounds(getWidth() / 3, rowH * 4, getWidth() / 3, rowH);
+}
+
+void DeckGUI::buttonClicked(juce::Button* button)
+{
+    if (button == &playButton)
+    {
+        player->start();
+    }
+    else if (button == &stopButton)
+    {
+        player->stop();
+    }
+    else if (button == &loadButton)
+    {
+        fileChooser = std::make_unique<juce::FileChooser>("Select an audio file to play...",
+                                                          juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+                                                          "*.wav;*.mp3;*.m4a;*.aac;*.flac;*.ogg;*.aif;*.aiff");
+        
+        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
+                                [this](const juce::FileChooser& fc)
+                                {
+                                    auto file = fc.getResult();
+                                    if (file.existsAsFile())
+                                    {
+                                        player->loadURL(juce::URL{file});
+                                    }
+                                });
+    }
+}
+
+void DeckGUI::sliderValueChanged(juce::Slider* slider)
+{
+    if (slider == &volSlider)
+    {
+        player->setGain(slider->getValue());
+    }
+    else if (slider == &speedSlider)
+    {
+        player->setSpeed(slider->getValue());
+    }
+    else if (slider == &posSlider)
+    {
+        player->setPositionRelative(slider->getValue());
+    }
 }

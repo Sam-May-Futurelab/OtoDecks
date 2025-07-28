@@ -1,28 +1,27 @@
-/*
-  ==============================================================================
-
-    DeckGUI.h
-    Created: 27 Jul 2025 2:52:05pm
-    Author:  MacBook
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
+#include "DJAudioPlayer.h"
 
 //==============================================================================
 /*
 */
-class DeckGUI  : public juce::Component
+class DeckGUI  : public juce::Component,
+                 public juce::Button::Listener,
+                 public juce::Slider::Listener
 {
 public:
-    DeckGUI();
+    DeckGUI(DJAudioPlayer* player);
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    // Implement Button::Listener
+    void buttonClicked(juce::Button* button) override;
+    
+    // Implement Slider::Listener
+    void sliderValueChanged(juce::Slider* slider) override;
 
 private:
     juce::Slider volSlider;
@@ -34,6 +33,9 @@ private:
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
     juce::TextButton loadButton{"LOAD"};
+    
+    DJAudioPlayer* player;
+    std::unique_ptr<juce::FileChooser> fileChooser;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

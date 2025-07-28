@@ -32,11 +32,10 @@ void WaveformDisplay::paint (juce::Graphics& g)
                                   getLocalBounds(),
                                   0,
                                   audioThumbnail.getTotalLength(),
-                                  0, 1.0f), 
-                                  g.setColour(juce::Colours::green),
-                                  g.drawRect(position * getWidth(), 0, 10, getHeight());
-
-
+                                  0, 1.0f);
+        
+        g.setColour(juce::Colours::green);
+        g.drawRect(position * getWidth(), 0, 10, getHeight());
     }
     else
       {

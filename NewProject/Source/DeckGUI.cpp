@@ -48,10 +48,13 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     volSlider.addListener(this);
     speedSlider.addListener(this);
     posSlider.addListener(this);
+
+    startTimer(500);
 }
 
 DeckGUI::~DeckGUI()
 {
+    stopTimer();
 }
 
 void DeckGUI::paint (juce::Graphics& g)
@@ -144,4 +147,9 @@ void DeckGUI::sliderValueChanged(juce::Slider* slider)
         {
           player->loadURL(juce::URL{juce::File{files[0]}});
         }
-  }  
+  }
+
+  void DeckGUI::timerCallback()
+  {
+    waveformDisplay.setPositionRelative(player->getPositionRelative());
+  }

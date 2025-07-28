@@ -26,10 +26,6 @@ MainComponent::MainComponent()
     // Add the two DeckGUI components
     addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
-    
-    // Set up audio mixer
-    mixerSource.addInputSource(&player1, false);
-    mixerSource.addInputSource(&player2, false);
 }
 
 MainComponent::~MainComponent()

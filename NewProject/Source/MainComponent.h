@@ -32,7 +32,5 @@ private:
     DeckGUI deckGUI1{&player1, formatManager, thumbnailCache};
     DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
 
-    juce::MixerAudioSource mixer;
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

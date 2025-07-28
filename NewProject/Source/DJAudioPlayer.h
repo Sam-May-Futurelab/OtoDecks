@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    DJAudioPlayer.h
-    Created: 27 Jul 2025 10:55:32am
-    Author:  MacBook
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -32,6 +22,10 @@ class DJAudioPlayer : public juce::AudioSource
 
     void start();
     void stop();
+
+    // Get the current position of the track in seconds
+    double getPositionRelative();
+
 
   private:
     juce::AudioFormatManager& formatManager;

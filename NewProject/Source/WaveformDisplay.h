@@ -20,11 +20,15 @@ public:
 
     void loadURL(juce::URL audioURL);
 
+    // sets the position of the waveform display relative to the audio file
+    void setPositionRelative(double pos);
+
 private:
     juce::AudioFormatManager & formatManager;
     juce::AudioThumbnailCache & thumbnailCache;
     juce::AudioThumbnail audioThumbnail;
     bool fileLoaded;
+    double position;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaveformDisplay)
 };

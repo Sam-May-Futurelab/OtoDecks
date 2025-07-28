@@ -7,7 +7,8 @@ WaveformDisplay::WaveformDisplay(juce::AudioFormatManager & formatManagerToUse,
     : formatManager(formatManagerToUse), 
       thumbnailCache(thumbnailCacheToUse),
       audioThumbnail(1000, formatManager, thumbnailCache),
-      fileLoaded(false)
+      fileLoaded(false),
+      position(0.0)
 {
     audioThumbnail.addChangeListener(this);
 }
@@ -31,7 +32,11 @@ void WaveformDisplay::paint (juce::Graphics& g)
                                   getLocalBounds(),
                                   0,
                                   audioThumbnail.getTotalLength(),
-                                  0, 1.0f); // Draw the waveform thumbnail  
+                                  0, 1.0f), 
+                                  g.setColour(juce::Colours::green),
+                                  g.drawRect(position * getWidth(), 0, 10, getHeight());
+
+
     }
     else
       {
@@ -70,5 +75,14 @@ void WaveformDisplay::changeListenerCallback (juce::ChangeBroadcaster *source)
 
         repaint();
 
+}
+
+void WaveformDisplay::setPositionRelative(double pos)
+{
+  if (pos != position)
+  {
+    position = pos;
+    repaint();
+  }
 }
   

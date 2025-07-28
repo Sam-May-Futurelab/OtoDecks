@@ -2,7 +2,10 @@
 #include "DeckGUI.h"
 
 //==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
+DeckGUI::DeckGUI(DJAudioPlayer* _player, 
+                  juce::AudioFormatManager & formatManagerToUse,
+                  juce::AudioThumbnailCache & thumbnailCacheToUse)
+                  : player(_player), waveformDisplay(formatManagerToUse, thumbnailCacheToUse)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
@@ -12,6 +15,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);   
     addAndMakeVisible(posLabel);
+    addAndMakeVisible(waveformDisplay);
 
     volLabel.setText("Volume", juce::dontSendNotification);
     volLabel.setJustificationType(juce::Justification::centred);
@@ -64,16 +68,23 @@ void DeckGUI::paint (juce::Graphics& g)
 void DeckGUI::resized()
 {
     double rowH = getHeight() / 8.0; 
-
-    playButton.setBounds(10, 10, getWidth() / 4, rowH);
-    stopButton.setBounds(10, rowH + 15, getWidth() / 4, rowH);
-    loadButton.setBounds(10, rowH * 2 + 20, getWidth() / 4, rowH);
     
-    volLabel.setBounds(getWidth() / 3, 0, getWidth() / 3, rowH);
-    volSlider.setBounds(getWidth() / 3, rowH, getWidth() / 3, rowH);
-    speedSlider.setBounds(getWidth() / 3, rowH * 2, getWidth() / 3, rowH);
-    posLabel.setBounds(getWidth() / 3, rowH * 3, getWidth() / 3, rowH);
-    posSlider.setBounds(getWidth() / 3, rowH * 4, getWidth() / 3, rowH);
+    // Top row - buttons side by side
+    playButton.setBounds(10, 10, getWidth() / 4, rowH);
+    stopButton.setBounds(getWidth() / 4 + 20, 10, getWidth() / 4, rowH);
+    loadButton.setBounds(getWidth() / 2 + 30, 10, getWidth() / 4, rowH);
+    
+    // Sliders - full width of section
+    volLabel.setBounds(10, rowH + 20, getWidth() - 20, 20);
+    volSlider.setBounds(10, rowH + 40, getWidth() - 20, rowH);
+    
+    speedSlider.setBounds(10, rowH * 2 + 60, getWidth() - 20, rowH);
+    
+    posLabel.setBounds(10, rowH * 3 + 80, getWidth() - 20, 20);
+    posSlider.setBounds(10, rowH * 3 + 100, getWidth() - 20, rowH);
+    
+    // Waveform - bottom half
+    waveformDisplay.setBounds(10, rowH * 5, getWidth() - 20, getHeight() - rowH * 5 - 10);
 }
 
 void DeckGUI::buttonClicked(juce::Button* button)
@@ -99,6 +110,7 @@ void DeckGUI::buttonClicked(juce::Button* button)
                                     if (file.existsAsFile())
                                     {
                                         player->loadURL(juce::URL{file});
+                                        waveformDisplay.loadURL(juce::URL{file});
                                     }
                                 });
     }

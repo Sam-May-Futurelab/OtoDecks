@@ -18,14 +18,19 @@ public:
     void resized() override;
 
 private:
+
+    // WaveForm display
+    juce::AudioFormatManager formatManager;
+    juce::AudioThumbnailCache thumbnailCache{100};
+
     // Audio players and mixers
     DJAudioPlayer player1;
     DJAudioPlayer player2;
     juce::MixerAudioSource mixerSource;
     
     // GUI components - one for each deck
-    DeckGUI deckGUI1{&player1};
-    DeckGUI deckGUI2{&player2};
+    DeckGUI deckGUI1{&player1, formatManager, thumbnailCache};
+    DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
 
     juce::MixerAudioSource mixer;
 

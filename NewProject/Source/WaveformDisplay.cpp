@@ -6,7 +6,8 @@ WaveformDisplay::WaveformDisplay(juce::AudioFormatManager & formatManagerToUse,
                                   juce::AudioThumbnailCache & thumbnailCacheToUse)
     : formatManager(formatManagerToUse), 
       thumbnailCache(thumbnailCacheToUse),
-      audioThumbnail(1000, formatManager, thumbnailCache)
+      audioThumbnail(1000, formatManager, thumbnailCache),
+      fileLoaded(false)
 {
     audioThumbnail.addChangeListener(this);
 }

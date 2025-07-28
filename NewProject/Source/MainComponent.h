@@ -24,8 +24,8 @@ private:
     juce::AudioThumbnailCache thumbnailCache{100};
 
     // Audio players and mixers
-    DJAudioPlayer player1;
-    DJAudioPlayer player2;
+    DJAudioPlayer player1{formatManager};
+    DJAudioPlayer player2{formatManager};
     juce::MixerAudioSource mixerSource;
     
     // GUI components - one for each deck

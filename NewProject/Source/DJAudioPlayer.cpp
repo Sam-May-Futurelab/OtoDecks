@@ -10,9 +10,11 @@
 
 #include "DJAudioPlayer.h"
 
-DJAudioPlayer::DJAudioPlayer() : resamplingSource(&transportSource, false, 2)
+DJAudioPlayer::DJAudioPlayer(juce::AudioFormatManager& _formatManager) : 
+    formatManager(_formatManager),
+    resamplingSource(&transportSource, false, 2)
 {
-    formatManager.registerBasicFormats();
+    // formatManager is already initialized in MainComponent
 }
 
 DJAudioPlayer::~DJAudioPlayer()

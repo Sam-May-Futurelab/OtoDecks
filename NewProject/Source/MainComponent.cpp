@@ -69,7 +69,7 @@ void MainComponent::resized()
     // Create a 3-section layout: decks on top, playlist at bottom
     auto area = getLocalBounds();
     
-    // Reserve bottom area for playlist (bigger, e.g., 150 pixels)
+    // Reserve bottom area for playlist (150 pixels)
     auto playlistArea = area.removeFromBottom(150);
     playlistComponent.setBounds(playlistArea);
     

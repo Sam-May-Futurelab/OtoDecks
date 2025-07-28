@@ -8,33 +8,36 @@ WaveformDisplay::WaveformDisplay(juce::AudioFormatManager & formatManagerToUse,
       thumbnailCache(thumbnailCacheToUse),
       audioThumbnail(1000, formatManager, thumbnailCache)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    audioThumbnail.addChangeListener(this);
 }
 
 WaveformDisplay::~WaveformDisplay()
 {
+
 }
 
 void WaveformDisplay::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (20.0f));
-    g.drawText ("File not loaded...", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    if(fileLoaded)
+    {
+        audioThumbnail.drawChannel(g,
+                                  getLocalBounds(),
+                                  0,
+                                  audioThumbnail.getTotalLength(),
+                                  0, 1.0f); // Draw the waveform thumbnail  
+    }
+    else
+      {
+        g.setFont (juce::FontOptions (20.0f));
+        g.drawText ("File not loaded...", getLocalBounds(),
+        juce::Justification::centred, true);   // draw some placeholder text
+      }
 }
 
 void WaveformDisplay::resized()
@@ -48,13 +51,23 @@ void WaveformDisplay::loadURL(juce::URL audioURL)
 {
     std::cout << "wfd: load url" << std::endl;
     audioThumbnail.clear();
-    bool loaded =audioThumbnail.setSource(new juce::URLInputSource(audioURL));
-    if (loaded)
+    fileLoaded = audioThumbnail.setSource(new juce::URLInputSource(audioURL));
+    if (fileLoaded)
     {
         std::cout << "WaveformDisplay: Audio loaded successfully." << std::endl;
+        repaint();
     }
     else
     {
         std::cout << "WaveformDisplay: Failed to load audio." << std::endl;
     }
 }
+
+void WaveformDisplay::changeListenerCallback (juce::ChangeBroadcaster *source)
+{
+        std::cout << "WaveformDisplay: Change listener callback triggered." << std::endl;
+
+        repaint();
+
+}
+  

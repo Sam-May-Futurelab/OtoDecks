@@ -86,9 +86,15 @@ void PlaylistComponent::paintCell(juce::Graphics& g,
       {
         if (existingComponentToUpdate == nullptr)
         {
-          existingComponentToUpdate = new juce::TextButton{"Play"};
+          juce::TextButton* btn = new juce::TextButton{"Play"};
+          btn->addListener(this);
+          existingComponentToUpdate = btn; // Return the same button we added listener to
         }
       }
       return existingComponentToUpdate;
+    }
 
+    void PlaylistComponent::buttonClicked(juce::Button* button)
+    {
+      std::cout << "PlaylistComponent: Button clicked!" << std::endl;
     }

@@ -18,7 +18,8 @@
 /*
 */
 class PlaylistComponent  : public juce::Component,
-                           public juce::TableListBoxModel
+                           public juce::TableListBoxModel,
+                           public juce::Button::Listener
 
 {
 public:
@@ -46,6 +47,8 @@ public:
                                         int columnId, 
                                         bool isRowSelected, 
                                         juce::Component *existingComponentToUpdate) override;
+
+    void buttonClicked(juce::Button* button) override;
 
 private:
 

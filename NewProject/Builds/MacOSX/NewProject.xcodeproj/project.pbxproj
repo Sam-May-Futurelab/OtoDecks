@@ -44,6 +44,7 @@
 		EEECCB489F83FF1AA9F03C92 /* Security.framework */ = {isa = PBXBuildFile; fileRef = 48E2C3C1A47853AA4E45745B; };
 		F6129088CF4DB9C76529626A /* CoreAudioKit.framework */ = {isa = PBXBuildFile; fileRef = 5A5214F76E1D791CD8232F98; };
 		FA1868E613619F947F44A200 /* WaveformDisplay.cpp */ = {isa = PBXBuildFile; fileRef = 54D9DB84EE786CB41D23D45E; };
+		FB1347404BE2FE47ECCE2445 /* PlaylistComponent.cpp */ = {isa = PBXBuildFile; fileRef = 1D1E715EC57B9CE0D80461A7; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +52,9 @@
 		06EC52689770E743D0D851D3 /* CoreMIDI.framework */ /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		0931107167796DFED64EF69A /* include_juce_events.mm */ /* include_juce_events.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_events.mm; path = ../../JuceLibraryCode/include_juce_events.mm; sourceTree = SOURCE_ROOT; };
 		0A70EAABEFBBAAF407755F42 /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
+		1463605C047D1D27CB49DF1D /* PlaylistComponent.h */ /* PlaylistComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlaylistComponent.h; path = ../../Source/PlaylistComponent.h; sourceTree = SOURCE_ROOT; };
 		195B64D715C17017667BE521 /* DeckGUI.h */ /* DeckGUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeckGUI.h; path = ../../Source/DeckGUI.h; sourceTree = SOURCE_ROOT; };
+		1D1E715EC57B9CE0D80461A7 /* PlaylistComponent.cpp */ /* PlaylistComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlaylistComponent.cpp; path = ../../Source/PlaylistComponent.cpp; sourceTree = SOURCE_ROOT; };
 		28646460175187022F1073E5 /* WaveformDisplay.h */ /* WaveformDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WaveformDisplay.h; path = ../../Source/WaveformDisplay.h; sourceTree = SOURCE_ROOT; };
 		2AEB2558D365A4F12F5FEF92 /* include_juce_audio_formats.mm */ /* include_juce_audio_formats.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_formats.mm; path = ../../JuceLibraryCode/include_juce_audio_formats.mm; sourceTree = SOURCE_ROOT; };
 		2CB1104CD55F7FED3B2AFB5A /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
@@ -211,6 +214,8 @@
 		B98156B7791DE1E1A9573D23 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				1D1E715EC57B9CE0D80461A7,
+				1463605C047D1D27CB49DF1D,
 				54D9DB84EE786CB41D23D45E,
 				28646460175187022F1073E5,
 				BD70B817E07EBA1F260C5841,
@@ -331,6 +336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1347404BE2FE47ECCE2445,
 				FA1868E613619F947F44A200,
 				9995C85801CDB5C2E68F1D15,
 				9A9DA394DEC610657B5EFAC1,

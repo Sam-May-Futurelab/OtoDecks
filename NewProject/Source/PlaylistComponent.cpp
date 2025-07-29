@@ -87,6 +87,8 @@ void PlaylistComponent::paintCell(juce::Graphics& g,
         if (existingComponentToUpdate == nullptr)
         {
           juce::TextButton* btn = new juce::TextButton{"Play"};
+          juce::String id{std::to_string(rowNumber)};
+          btn->setName(id); // Sets a unique name for the button
           btn->addListener(this);
           existingComponentToUpdate = btn; // Return the same button we added listener to
         }
@@ -96,5 +98,6 @@ void PlaylistComponent::paintCell(juce::Graphics& g,
 
     void PlaylistComponent::buttonClicked(juce::Button* button)
     {
-      std::cout << "PlaylistComponent: Button clicked!" << std::endl;
+      int id = std::stoi(button->getName().toStdString());
+      std::cout << "PlaylistComponent: Button clicked!" << trackTitles[id] << std::endl;
     }

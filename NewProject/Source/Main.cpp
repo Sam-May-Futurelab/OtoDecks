@@ -1,9 +1,6 @@
 /*
-  ==============================================================================
-
-    This file contains the basic startup code for a JUCE application.
-
-  ==============================================================================
+  Author: Sam May
+  Note: Entire file written by me as part of CM2005 coursework
 */
 
 #include <JuceHeader.h>

@@ -1,3 +1,8 @@
+/*
+  Author: Sam May
+  Note: Entire file written by me as part of CM2005 coursework
+*/
+
 #include "DJAudioPlayer.h"
 
 DJAudioPlayer::DJAudioPlayer(juce::AudioFormatManager& _formatManager) : 
@@ -40,7 +45,8 @@ void DJAudioPlayer::releaseResources()
 
 void DJAudioPlayer::loadURL(juce::URL audioURL)
 {
-    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(juce::URL::InputStreamOptions(juce::URL::ParameterHandling::inAddress)));
+    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(juce::URL::InputStreamOptions
+        (juce::URL::ParameterHandling::inAddress)));
     if (reader != nullptr)
     {
         transportSource.setSource(nullptr);

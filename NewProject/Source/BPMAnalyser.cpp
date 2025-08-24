@@ -1,3 +1,8 @@
+/*
+  Author: Sam May
+  Note: Entire file written by me as part of CM2005 coursework
+*/
+
 #include "BPMAnalyser.h"
 
 BPMAnalyser::BPMAnalyser(double sampleRate)
